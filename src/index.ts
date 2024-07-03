@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import CreateJob from "./producers/Sampleproducer";
 import SampleWorker from "./worker/Sampleworker";
 import bullboardAdapter from './config/bullboard.config'
+import runPython from "./containers/runpythoncontainer";
 const app=express();
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
@@ -24,4 +25,16 @@ app.listen(serverconfig.PORT,()=>{
        name:"Lakshya",
        role:"sde-2"
    })
+const code =`x= input()
+print("value of x", x)
+`;
+   runPython(code,"100");
 })
+
+//types in typescript
+// type person={
+//     id:number,
+//     name:string,
+// }
+//unions
+//let x:number|string;

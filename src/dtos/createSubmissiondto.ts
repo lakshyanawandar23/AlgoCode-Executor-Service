@@ -6,6 +6,7 @@ export interface  CreateSubmissiondto {
     code:string,
     language:string
 }
+//export const CreateSubmissiondto=<typeof submissionSchema> 
 //zod schema
 export const submissionSchema=z.object({
     userid:z.string(),
