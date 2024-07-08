@@ -7,6 +7,8 @@ import SampleWorker from "./worker/Sampleworker";
 import bullboardAdapter from './config/bullboard.config'
 import runPython from "./containers/runpythoncontainer";
 import runcpp from "./containers/runcppcontainer";
+import SubmissionWorker from "./worker/Submissionworker";
+import CreateSubmissionJob from "./producers/Submissionproducer";
 const app=express();
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
@@ -21,20 +23,41 @@ app.use('/ui',bullboardAdapter.getRouter());
 app.listen(serverconfig.PORT,()=>{
     console.log("server is up");
     console.log("ui dashboard ")
-   SampleWorker("Sample");
-    CreateJob("Sample",{
-       name:"Lakshya",
-       role:"sde-2"
-   })
+//    SampleWorker("Sample");
+//     CreateJob("Sample",{
+//        name:"Lakshya",
+//        role:"sde-2"
+//    })
+const usercode=
+`
+ class Solution {
+  public :
+  void solve(int x){
+      cout<<x<<endl;
+    }
+ };
+ `;
 const code =`#include <bits/stdc++.h>
-    using namespace std;
-   int main(){
-    int x;
-    cin>>x;
-    cout<<x<<endl;
-   }
+  using namespace std;
+  ${usercode} 
+ int main(){
+ int x;
+ cin>>x;
+ Solution s;
+ s.solve(x);
+ cout<<endl;
+ }
 `;
-   runcpp(code,"50");
+const inputestcase="20";
+   SubmissionWorker('submissionQueue');
+   CreateSubmissionJob("submissionQueue",{
+    language:"cpp",
+    code,
+    inputestcase,
+
+   })
+  
+   //runcpp(code,"5");
 })
 
 //types in typescript

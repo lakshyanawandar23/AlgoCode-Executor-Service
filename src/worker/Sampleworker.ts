@@ -1,8 +1,5 @@
 import redisConnection from "../config/redis.config";
-import { WorkerResponse } from "../interface/bullMqJobResponse";
-import { IJob } from "../interface/bullMqJobdefintion";
 import SampleJob from "../jobs/SampleJobs";
-import Samplequeue from "../queue/Samplequeue";
 import { Job, Worker } from "bullmq";
 
 
