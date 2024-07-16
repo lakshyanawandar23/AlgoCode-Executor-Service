@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import CreateJob from "./producers/Sampleproducer";
 import SampleWorker from "./worker/Sampleworker";
 import bullboardAdapter from './config/bullboard.config'
-import runPython from "./containers/runpythoncontainer";
 import runcpp from "./containers/runcppcontainer";
 import SubmissionWorker from "./worker/Submissionworker";
 import CreateSubmissionJob from "./producers/Submissionproducer";
@@ -49,12 +48,13 @@ const code =`#include <bits/stdc++.h>
  }
 `;
 const inputestcase="20";
+const outputestcase="20";
    SubmissionWorker('submissionQueue');
    CreateSubmissionJob("submissionQueue",{
     language:"cpp",
     code,
     inputestcase,
-
+    outputestcase,
    })
   
    //runcpp(code,"5");

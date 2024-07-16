@@ -1,8 +1,12 @@
 import containerFactory from "./containerFactory";
 import { CPP_IMAGE } from "../utils/images";
 import dockerstreme from "./dockerhelper";
+import { CodeExecutorStrategy } from "../interface/CodeExecutorStrategy";
 
-async function runcpp(code:string,inputTestCase:string){
+
+class  CppExecutor implements CodeExecutorStrategy{
+
+async  execute(code:string,inputTestCase:string){
     const buffer :Buffer []=[];
     console.log("Intalize the container");
     console.log(code);
@@ -21,15 +25,33 @@ async function runcpp(code:string,inputTestCase:string){
       //console.log(chunk)
        buffer.push(chunk);
      })
-     let decodebuffer;
-     logger.on('end',()=>{
-        //console.log(buffer);
-        const completebuffer =Buffer.concat(buffer);
-         decodebuffer=dockerstreme(completebuffer);
-        console.log(decodebuffer);
-        container.remove();
-     })
-     return decodebuffer;
+     try {
+      const codeResponse : string = await this.fetchDecodedStream(logger, buffer);
+      return {output: codeResponse, status: "COMPLETED"};
+  } catch (error) {
+      return {output: error as string, status: "ERROR"}
+  } finally {
+      await container.remove();
+
+  }
 }
 
-export default runcpp;
+fetchDecodedStream(loggerStream: NodeJS.ReadableStream, rawLogBuffer: Buffer[]) : Promise<string> {
+  return new Promise((res, rej) => {
+      loggerStream.on('end', () => {
+          console.log(rawLogBuffer);
+          const completeBuffer = Buffer.concat(rawLogBuffer);
+          const decodedStream = dockerstreme(completeBuffer);
+          console.log(decodedStream);
+          console.log(decodedStream.stdout);
+          if(decodedStream.stderr) {
+              rej(decodedStream.stderr);
+          } else {
+              res(decodedStream.stdout);
+          }
+      });
+  })
+}
+}
+
+export default CppExecutor;

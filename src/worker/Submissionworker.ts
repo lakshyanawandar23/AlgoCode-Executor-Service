@@ -1,5 +1,6 @@
 import redisConnection from "../config/redis.config";
 import runcpp from "../containers/runcppcontainer";
+import createexcutor from "../interface/createexecutor";
 import SubmissionJob from "../jobs/SubmissionJob";
 import { Job, Worker } from "bullmq";
 
@@ -13,9 +14,6 @@ export default function SubmissionWorker(queuename:string){
              console.log(job.data);
              const sampel=new SubmissionJob(job.data);
              console.log(sampel.payload.inputestcase);
-             if(sampel.payload.language==="cpp"){
-                runcpp(sampel.payload.code,sampel.payload.inputestcase);
-            }
              return true;
         }
     },
