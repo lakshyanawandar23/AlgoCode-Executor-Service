@@ -9,11 +9,13 @@ export default function SubmissionWorker(queuename:string){
    new Worker(
     queuename,
     async (job:Job)=>{
-        console.log(job.name)
+       // console.log(job)
         if(job.name==="submissionQueue"){
-             console.log(job.data);
+           // console.log(job.data);
              const sampel=new SubmissionJob(job.data);
-             console.log(sampel.payload.inputestcase);
+       const resp=    await   sampel.handle(job);
+          //   console.log(sampel.payload.inputestcase);
+          console.log(resp);
              return true;
         }
     },

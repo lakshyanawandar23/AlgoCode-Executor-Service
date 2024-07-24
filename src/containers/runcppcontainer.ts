@@ -6,10 +6,10 @@ import { CodeExecutorStrategy } from "../interface/CodeExecutorStrategy";
 
 class  CppExecutor implements CodeExecutorStrategy{
 
-async  execute(code:string,inputTestCase:string){
+async  execute(code:string,inputTestCase:string,outpuTestcase:string){
     const buffer :Buffer []=[];
     console.log("Intalize the container");
-    console.log(code);
+    console.log(code,inputTestCase,outpuTestcase);
     const runcommand =   `echo '${code.replace(/'/g, `'\\"`)}' > main.cpp && g++ main.cpp -o main && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | ./main`;
     const container =await containerFactory(CPP_IMAGE,['bin/sh','-c',runcommand]);
       console.log("Booting container")
@@ -27,6 +27,7 @@ async  execute(code:string,inputTestCase:string){
      })
      try {
       const codeResponse : string = await this.fetchDecodedStream(logger, buffer);
+      
       return {output: codeResponse, status: "COMPLETED"};
   } catch (error) {
       return {output: error as string, status: "ERROR"}

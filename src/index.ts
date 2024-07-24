@@ -50,12 +50,12 @@ const code =`#include <bits/stdc++.h>
 const inputestcase="20";
 const outputestcase="20";
    SubmissionWorker('submissionQueue');
-   CreateSubmissionJob("submissionQueue",{
-    language:"cpp",
-    code,
-    inputestcase,
-    outputestcase,
-   })
+//    CreateSubmissionJob("submissionQueue",{
+//     language:"cpp",
+//     code,
+//     inputestcase,
+//     outputestcase,
+//    })
   
    //runcpp(code,"5");
 })
